@@ -24,6 +24,7 @@ class ChatApp extends StatelessWidget {
       ),
       //ログイン画面を表示
       home: const LoginPage(),
+      
     );
   }
 }
