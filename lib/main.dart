@@ -4,7 +4,6 @@ import 'package:messageapp/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/login.dart';
 import 'pages/chatpage.dart';
-import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
