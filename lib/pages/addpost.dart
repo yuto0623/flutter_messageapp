@@ -48,7 +48,8 @@ class _AddPostPageState extends State<AddPostPage> {
                   child: const Text('投稿'),
                   onPressed: () async {
                     final date =
-                        DateTime.now().toLocal().toIso8601String(); //現在の日時
+                        DateTime.now(); //現在の日時
+                    final dateText = date.year.toString() + '年' + date.month.toString() + '月' + date.day.toString() + '日' + date.hour.toString() + '時' + date.minute.toString() + '分';
                     final email = widget.user.email; //AddPostPageのデータを参照
                     //投稿メッセージ用ドキュメント作成
                     await FirebaseFirestore.instance
@@ -57,7 +58,7 @@ class _AddPostPageState extends State<AddPostPage> {
                         .set({
                       'text': messageText,
                       'email': email,
-                      'date': date
+                      'date': dateText
                     });
                     //1つ前の画面に戻る
                     Navigator.of(context).pop();

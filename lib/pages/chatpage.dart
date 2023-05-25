@@ -45,7 +45,7 @@ class ChatPage extends StatelessWidget {
               //投稿日時でソート
               stream: FirebaseFirestore.instance
                   .collection('posts')
-                  .orderBy('date')
+                  .orderBy('date', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 //データが取得出来た場合
@@ -57,7 +57,8 @@ class ChatPage extends StatelessWidget {
                       return Card(
                         child: ListTile(
                           title: Text(document['text']),
-                          subtitle: Text(document['email']),
+                          subtitle:
+                              Text(document['email'] + '  ' + document['date']),
                           //自分の投稿メッセージの場合は削除ボタンを表示
                           trailing: document['email'] == user.email
                               ? IconButton(
