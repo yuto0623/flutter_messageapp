@@ -14,30 +14,15 @@ Future main() async {
   runApp(ChatApp());
 }
 
-// class ChatApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       //アプリ名
-//       title: 'ChatApp',
-//       theme: ThemeData(
-//         //テーマカラー
-//         primarySwatch: Colors.blue,
-//       ),
-//       //ログイン画面を表示
-//       home: const LoginPage(),
-//     );
-//   }
-// }
-
 //ログイン判定を行うウィジェット
 class ChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ChatApp',
-        theme: ThemeData(
+        theme: ThemeData.dark(
           //テーマカラー
+
           useMaterial3: true,
         ),
         home: StreamBuilder<User?>(

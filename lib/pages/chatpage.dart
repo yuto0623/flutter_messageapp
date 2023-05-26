@@ -18,68 +18,84 @@ class ChatPage extends StatelessWidget {
         title: const Text('チャット'),
       ),
       drawer: Drawer(
-        child: ListView(
+        child: Column(
           children: [
-            DrawerHeader(
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('users')
-                      .where(
-                        'uid',
-                        isEqualTo: FirebaseAuth.instance.currentUser?.uid,
-                      )
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      // nullチェックを追加
-                      final documents = snapshot.data!.docs; // nullでないことを保証
-                      return ListView.builder(
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          final document = documents[index];
-                          final userName = document.get('user');
-                          return ListTile(
-                            title: Text("あなたの名前：${userName}"),
+            Expanded(
+                child: Column(
+              children: [
+                DrawerHeader(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .where(
+                            'uid',
+                            isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+                          )
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          // nullチェックを追加
+                          final documents = snapshot.data!.docs; // nullでないことを保証
+                          return ListView.builder(
+                            itemCount: documents.length,
+                            itemBuilder: (context, index) {
+                              final document = documents[index];
+                              final userName = document.get('user');
+                              return ListTile(
+                                title: Text("あなたの名前：${userName}"),
+                              );
+                            },
                           );
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return const CircularProgressIndicator();
-                    }
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: TextButton(
+                    child: Text('設定'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const SettingsWidget();
+                      }));
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: TextButton(
+                    child: const Text('ログアウト'),
+                    onPressed: () async {
+                      //ログアウト処理
+                      //内部で保持しているログイン情報などが初期化される
+                      await FirebaseAuth.instance.signOut();
+                      //ログイン画面に遷移＋チャット画面を破棄
+                      await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                        return const LoginPage();
+                      }));
+                    },
+                  ),
+                ),
+              ],
+            )),
+            Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.bedtime),
+                  onPressed: () {
+
                   },
                 ),
-              ),
-            ),
-            ListTile(
-              title: TextButton(
-                child: Text('設定'),
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const SettingsWidget();
-                  }));
-                },
-              ),
-            ),
-            ListTile(
-              title: TextButton(
-                child: const Text('ログアウト'),
-                onPressed: () async {
-                  //ログアウト処理
-                  //内部で保持しているログイン情報などが初期化される
-                  await FirebaseAuth.instance.signOut();
-                  //ログイン画面に遷移＋チャット画面を破棄
-                  await Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (context) {
-                    return const LoginPage();
-                  }));
-                },
-              ),
-            ),
+                const SizedBox(height: 10,)
+              ],
+            )
           ],
         ),
       ),
