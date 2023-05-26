@@ -60,7 +60,7 @@ class ChatPage extends StatelessWidget {
                 ),
                 ListTile(
                   title: TextButton(
-                    child: Text('設定'),
+                    child: const Text('設定'),
                     onPressed: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
@@ -90,8 +90,7 @@ class ChatPage extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.bedtime),
-                  onPressed: () async {
-                  },
+                  onPressed: () async {},
                 ),
                 const SizedBox(
                   height: 10,
@@ -122,6 +121,15 @@ class ChatPage extends StatelessWidget {
                     children: documents.map((document) {
                       return Card(
                         child: ListTile(
+                          leading: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: AssetImage('assets/icon.png'))),
+                          ),
                           title: Text(document['text']),
                           subtitle:
                               Text(document['user'] + '  ' + document['date']),
