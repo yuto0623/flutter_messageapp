@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'auth.dart';
 import 'chatpage.dart';
 
 //ログイン画面用Widget
@@ -23,21 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('ログイン')),
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(24),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                //ユーザー名入力
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'ユーザー名'),
-                  onChanged: (String value) {
-                    setState(() {
-                      userName = value;
-                    });
-                  },
-                ),
                 //メールアドレス入力
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'メールアドレス'),
@@ -66,36 +58,13 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     //ユーザー登録ボタン
                     child: ElevatedButton(
-                      child: const Text('ユーザー登録'),
-                      onPressed: () async {
-                        try {
-                          //メール/パスワードでユーザー登録
-                          final FirebaseAuth auth = FirebaseAuth.instance;
-                          final result =
-                              await auth.createUserWithEmailAndPassword(
-                                  email: email, password: password);
-                          //投稿メッセージ用ドキュメント作成
-                          await FirebaseFirestore.instance
-                              .collection('users') //コレクションID指定
-                              .doc() //ドキュメントID自動生成
-                              .set({
-                            'user': userName,
-                            'uid' : auth.currentUser?.uid.toString(),
-                          });
-                          //ユーザー登録に成功した場合
-                          //チャット画面に遷移＋ログイン画面を破棄
-                          await Navigator.of(context).pushReplacement(
+                        child: const Text('ユーザー登録'),
+                        onPressed: () async {
+                          await Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) {
-                            return ChatPage(result.user!);
+                            return AuthPage();
                           }));
-                        } catch (e) {
-                          //ユーザー登録に失敗した場合
-                          setState(() {
-                            infoText = "登録に失敗しました:${e.toString()}";
-                          });
-                        }
-                      },
-                    )),
+                        })),
                 const SizedBox(height: 8),
                 Container(
                   width: double.infinity,
