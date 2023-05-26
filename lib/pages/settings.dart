@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({super.key});
@@ -8,6 +10,7 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
+  String setName = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +20,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           const Text('ユーザー名変更'),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-            child: TextField(),
+            child: TextField(
+              onChanged: (String value) {
+                setName = value;
+              },
+            ),
           ),
-          ElevatedButton(onPressed: () {}, child: Text('決定'))
+          ElevatedButton(
+            onPressed: () async {},
+            child: Text('test'),
+          )
         ]),
       ),
     );

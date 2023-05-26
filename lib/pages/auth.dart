@@ -78,7 +78,7 @@ class _AuthPageState extends State<AuthPage> {
                           //投稿メッセージ用ドキュメント作成
                           await FirebaseFirestore.instance
                               .collection('users') //コレクションID指定
-                              .doc() //ドキュメントID自動生成
+                              .doc(auth.currentUser?.uid) //ドキュメントIDとUIDを同じにする
                               .set({
                             'user': userName,
                             'uid': auth.currentUser?.uid.toString(),
