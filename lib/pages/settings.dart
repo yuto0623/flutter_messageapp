@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:messageapp/pages/chatpage.dart';
+import 'chatpage.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({super.key});
@@ -27,8 +29,18 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ),
           ),
           ElevatedButton(
-            onPressed: () async {},
-            child: Text('test'),
+            onPressed: () async {
+              final FirebaseAuth auth = FirebaseAuth.instance;
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(auth.currentUser?.uid.toString())
+                  .set({
+                'user': setName,
+                'uid': auth.currentUser?.uid.toString(),
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text('決定'),
           )
         ]),
       ),
