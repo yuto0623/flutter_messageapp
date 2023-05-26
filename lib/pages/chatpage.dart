@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login.dart';
 import 'addpost.dart';
+import 'settings.dart';
 
 //チャット画面用Widget
 class ChatPage extends StatelessWidget {
@@ -15,28 +16,75 @@ class ChatPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('チャット'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () async {
-              //ログアウト処理
-              //内部で保持しているログイン情報などが初期化される
-              await FirebaseAuth.instance.signOut();
-              //ログイン画面に遷移＋チャット画面を破棄
-              await Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context) {
-                return const LoginPage();
-              }));
-            },
-          )
-        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .where(
+                        'uid',
+                        isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+                      )
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      // nullチェックを追加
+                      final documents = snapshot.data!.docs; // nullでないことを保証
+                      return ListView.builder(
+                        itemCount: documents.length,
+                        itemBuilder: (context, index) {
+                          final document = documents[index];
+                          final userName = document.get('user');
+                          return ListTile(
+                            title: Text("あなたの名前：${userName}"),
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  },
+                ),
+              ),
+            ),
+            ListTile(
+              title: TextButton(
+                child: Text('設定'),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const SettingsWidget();
+                  }));
+                },
+              ),
+            ),
+            ListTile(
+              title: TextButton(
+                child: const Text('ログアウト'),
+                onPressed: () async {
+                  //ログアウト処理
+                  //内部で保持しているログイン情報などが初期化される
+                  await FirebaseAuth.instance.signOut();
+                  //ログイン画面に遷移＋チャット画面を破棄
+                  await Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
+                    return const LoginPage();
+                  }));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: Text('ログイン情報${user.email}'),
-          ),
           Expanded(
             //FuterBuilder
             //非同期処理の結果をもとにWidgetを作れる
@@ -58,7 +106,7 @@ class ChatPage extends StatelessWidget {
                         child: ListTile(
                           title: Text(document['text']),
                           subtitle:
-                              Text(document['email'] + '  ' + document['date']),
+                              Text(document['user'] + '  ' + document['date']),
                           //自分の投稿メッセージの場合は削除ボタンを表示
                           trailing: document['email'] == user.email
                               ? IconButton(
@@ -89,10 +137,17 @@ class ChatPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
+          // ユーザー名を取得
+          final userNameSnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .where('uid', isEqualTo: user.uid)
+              .get();
+          final userName = userNameSnapshot.docs[0].get('user');
+
           //投稿画面に遷移
           await Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) {
-            return AddPostPage(user);
+            return AddPostPage(user, userName);
           }));
         },
       ),

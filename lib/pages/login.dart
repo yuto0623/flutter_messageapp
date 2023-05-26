@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chatpage.dart';
 
 //ログイン画面用Widget
@@ -16,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   //入力したメールアドレス・パスワード
   String email = '';
   String password = '';
+  //入力したユーザー名
+  String userName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,15 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                //ユーザー名入力
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'ユーザー名'),
+                  onChanged: (String value) {
+                    setState(() {
+                      userName = value;
+                    });
+                  },
+                ),
                 //メールアドレス入力
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'メールアドレス'),
@@ -62,6 +74,14 @@ class _LoginPageState extends State<LoginPage> {
                           final result =
                               await auth.createUserWithEmailAndPassword(
                                   email: email, password: password);
+                          //投稿メッセージ用ドキュメント作成
+                          await FirebaseFirestore.instance
+                              .collection('users') //コレクションID指定
+                              .doc() //ドキュメントID自動生成
+                              .set({
+                            'user': userName,
+                            'uid' : auth.currentUser?.uid.toString(),
+                          });
                           //ユーザー登録に成功した場合
                           //チャット画面に遷移＋ログイン画面を破棄
                           await Navigator.of(context).pushReplacement(

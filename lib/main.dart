@@ -34,10 +34,11 @@ Future main() async {
 class ChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'ChatApp',
         theme: ThemeData(
           //テーマカラー
-          primarySwatch: Colors.blue,
+          useMaterial3: true,
         ),
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),

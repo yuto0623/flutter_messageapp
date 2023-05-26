@@ -5,10 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 //投稿画面
 class AddPostPage extends StatefulWidget {
   //引数からユーザー情報を受け取る
-  AddPostPage(this.user);
+  AddPostPage(this.user, this.userName);
   //ユーザー情報
   final User user;
-
+  //ユーザー名
+  final String userName;
   @override
   State<AddPostPage> createState() => _AddPostPageState();
 }
@@ -47,9 +48,17 @@ class _AddPostPageState extends State<AddPostPage> {
                 child: ElevatedButton(
                   child: const Text('投稿'),
                   onPressed: () async {
-                    final date =
-                        DateTime.now(); //現在の日時
-                    final dateText = date.year.toString() + '年' + date.month.toString() + '月' + date.day.toString() + '日' + date.hour.toString() + '時' + date.minute.toString() + '分';
+                    final date = DateTime.now(); //現在の日時
+                    final dateText = date.year.toString() +
+                        '年' +
+                        date.month.toString() +
+                        '月' +
+                        date.day.toString() +
+                        '日' +
+                        date.hour.toString() +
+                        '時' +
+                        date.minute.toString() +
+                        '分';
                     final email = widget.user.email; //AddPostPageのデータを参照
                     //投稿メッセージ用ドキュメント作成
                     await FirebaseFirestore.instance
@@ -57,6 +66,7 @@ class _AddPostPageState extends State<AddPostPage> {
                         .doc() //ドキュメントID自動生成
                         .set({
                       'text': messageText,
+                      'user': widget.userName,
                       'email': email,
                       'date': dateText
                     });
