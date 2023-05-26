@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'login.dart';
 import 'addpost.dart';
 import 'settings.dart';
@@ -89,11 +90,12 @@ class ChatPage extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.bedtime),
-                  onPressed: () {
-
+                  onPressed: () async {
                   },
                 ),
-                const SizedBox(height: 10,)
+                const SizedBox(
+                  height: 10,
+                )
               ],
             )
           ],
