@@ -69,6 +69,7 @@ class _AddPostPageState extends State<AddPostPage> {
                       'user': widget.userName,
                       'email': email,
                       'date': dateText
+
                     });
                     //1つ前の画面に戻る
                     Navigator.of(context).pop();
