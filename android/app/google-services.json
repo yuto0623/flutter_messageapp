@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:695906066563:android:a850e73a622df73e7d7bb6",
+        "mobilesdk_app_id": "1:695906066563:android:3c65be267bf11af97d7bb6",
         "android_client_info": {
           "package_name": "com.example.messageapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "695906066563-g9k744sl1kuug9lalepp7pvts0ead768.apps.googleusercontent.com",
+          "client_id": "695906066563-srdslaoormkefclvvu06blkdgnl4mcc0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +29,13 @@
             {
               "client_id": "695906066563-g9k744sl1kuug9lalepp7pvts0ead768.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "695906066563-m8b4ctbio5c3ur29sdk1atlv90msgimg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.messageapp"
+              }
             }
           ]
         }
