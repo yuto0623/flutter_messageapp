@@ -12,10 +12,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('設定画面')),
-      body: Center(child: Column(children: [
-        TextField(),
-        ElevatedButton(onPressed: () {}, child: Text('test'))
-      ]),),
+      body: Center(
+        child: Column(children: [
+          const Text('ユーザー名変更'),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+            child: TextField(),
+          ),
+          ElevatedButton(onPressed: () {}, child: Text('決定'))
+        ]),
+      ),
     );
   }
 }
